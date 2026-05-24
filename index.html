@@ -5,24 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>𝑾𝑯𝑰𝑺𝑲𝒀 𝑬𝑳𝒀𝑶𝑼𝑻𝑼𝑩𝑬𝑹 - منصة استضافة بوتات تليجرام</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             color: #fff;
             padding: 20px;
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1400px; margin: 0 auto; }
         
         .header {
             text-align: center;
@@ -40,10 +33,7 @@
             margin-bottom: 15px;
         }
         
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.8;
-        }
+        .header p { font-size: 1.2rem; opacity: 0.8; }
         
         .card {
             background: rgba(255,255,255,0.1);
@@ -59,9 +49,7 @@
             padding-right: 15px;
         }
         
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
         
         .form-group label {
             display: block;
@@ -97,9 +85,7 @@
             transition: transform 0.2s;
         }
         
-        button:hover {
-            transform: translateY(-2px);
-        }
+        button:hover { transform: translateY(-2px); }
         
         .bots-grid {
             display: grid;
@@ -113,9 +99,7 @@
             padding: 20px;
         }
         
-        .bot-card h3 {
-            margin-bottom: 10px;
-        }
+        .bot-card h3 { margin-bottom: 10px; }
         
         .bot-token {
             font-family: monospace;
@@ -132,15 +116,8 @@
             margin: 10px 0;
         }
         
-        .status-running {
-            background: #00ff8844;
-            color: #00ff88;
-        }
-        
-        .status-stopped {
-            background: #ff444444;
-            color: #ff4444;
-        }
+        .status-running { background: #00ff8844; color: #00ff88; }
+        .status-stopped { background: #ff444444; color: #ff4444; }
         
         .bot-actions {
             display: flex;
@@ -149,11 +126,7 @@
             margin-bottom: 15px;
         }
         
-        .bot-actions button {
-            padding: 6px 15px;
-            font-size: 12px;
-        }
-        
+        .bot-actions button { padding: 6px 15px; font-size: 12px; }
         .btn-start { background: #00ff88; color: #1a1a2e; }
         .btn-stop { background: #ff4444; color: #fff; }
         .btn-restart { background: #ffaa00; color: #1a1a2e; }
@@ -170,17 +143,8 @@
             margin-top: 15px;
         }
         
-        .logs p {
-            margin: 5px 0;
-            padding: 3px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 60px;
-            opacity: 0.6;
-        }
+        .logs p { margin: 5px 0; padding: 3px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .empty-state { text-align: center; padding: 60px; opacity: 0.6; }
         
         .toast {
             position: fixed;
@@ -201,12 +165,8 @@
         }
         
         @media (max-width: 768px) {
-            .bots-grid {
-                grid-template-columns: 1fr;
-            }
-            .header h1 {
-                font-size: 1.8rem;
-            }
+            .bots-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -222,7 +182,8 @@
             <form id="createBotForm">
                 <div class="form-group">
                     <label>📛 اسم البوت</label>
-                    <input type="text" id="botName" placeholder="مثال: my-awesome-bot" required>
+                    <input type="text" id="botName" placeholder="مثال: my-bot" required>
+                    <small style="opacity:0.6;">(أحرف إنجليزية، أرقام، وشرطة فقط)</small>
                 </div>
                 <div class="form-group">
                     <label>🔑 توكن البوت (من @BotFather)</label>
@@ -237,11 +198,12 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 BOT_TOKEN = "ضع_التوكن_هنا"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("مرحباً! ✅")
+    await update.message.reply_text("مرحباً! أنا بوت يعمل على المنصة ✅")
 
 def main():
     app = Application.builder().token(BOT_TOKEN).build()
     app.add_handler(CommandHandler("start", start))
+    print("✅ البوت يعمل...")
     app.run_polling()
 
 if __name__ == "__main__":
@@ -270,9 +232,7 @@ if __name__ == "__main__":
             toast.style.background = isError ? '#ff4444' : '#00ff88';
             toast.style.color = isError ? '#fff' : '#1a1a2e';
             toast.style.display = 'block';
-            setTimeout(() => {
-                toast.style.display = 'none';
-            }, 3000);
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
         }
         
         async function loadBots() {
@@ -312,11 +272,8 @@ if __name__ == "__main__":
                 document.getElementById('botsList').innerHTML = html;
                 
                 for (const bot of bots) {
-                    if (!logsIntervals[bot.name]) {
-                        startLogsPolling(bot.name);
-                    }
+                    if (!logsIntervals[bot.name]) startLogsPolling(bot.name);
                 }
-                
             } catch (e) {
                 document.getElementById('botsList').innerHTML = '<div class="empty-state">⚠️ خطأ في الاتصال بالخادم</div>';
             }
@@ -372,9 +329,7 @@ if __name__ == "__main__":
                             logsContainer.scrollTop = logsContainer.scrollHeight;
                         }
                     }
-                } catch (e) {
-                    console.error('Failed to fetch logs:', e);
-                }
+                } catch (e) {}
             };
             
             await fetchLogs();
