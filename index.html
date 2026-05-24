@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>𝑾𝑯𝑰𝑺𝑲𝒀 𝑬𝑳𝒀𝑶𝑼𝑻𝑼𝑩𝑬𝑹 - منصة استضافة بوتات تليجرام</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ffd89b, #c7e9fb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+        
+        .card h2 {
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-right: 4px solid #ffd89b;
+            padding-right: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            font-size: 14px;
+            font-family: monospace;
+        }
+        
+        .form-group textarea {
+            min-height: 200px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #ffd89b, #c7e9fb);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .bots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        
+        .bot-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 20px;
+        }
+        
+        .bot-card h3 {
+            margin-bottom: 10px;
+        }
+        
+        .bot-token {
+            font-family: monospace;
+            font-size: 11px;
+            opacity: 0.6;
+            word-break: break-all;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+        
+        .status-running {
+            background: #00ff8844;
+            color: #00ff88;
+        }
+        
+        .status-stopped {
+            background: #ff444444;
+            color: #ff4444;
+        }
+        
+        .bot-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+        
+        .bot-actions button {
+            padding: 6px 15px;
+            font-size: 12px;
+        }
+        
+        .btn-start { background: #00ff88; color: #1a1a2e; }
+        .btn-stop { background: #ff4444; color: #fff; }
+        .btn-restart { background: #ffaa00; color: #1a1a2e; }
+        .btn-delete { background: #666; color: #fff; }
+        
+        .logs {
+            background: rgba(0,0,0,0.5);
+            border-radius: 12px;
+            padding: 12px;
+            font-family: monospace;
+            font-size: 11px;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        
+        .logs p {
+            margin: 5px 0;
+            padding: 3px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px;
+            opacity: 0.6;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #333;
+            padding: 12px 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            animation: fadeInOut 3s ease;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateY(20px); }
+            15% { opacity: 1; transform: translateY(0); }
+            85% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); }
+        }
+        
+        @media (max-width: 768px) {
+            .bots-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>𝑾𝑯𝑰𝑺𝑲𝒀 𝑬𝑳𝒀𝑶𝑼𝑻𝑼𝑩𝑬𝑹</h1>
+            <p>🚀 منصة استضافة بوتات تليجرام | مجانية | آمنة | سريعة</p>
+        </div>
+        
+        <div class="card">
+            <h2>➕ إنشاء بوت جديد</h2>
+            <form id="createBotForm">
+                <div class="form-group">
+                    <label>📛 اسم البوت</label>
+                    <input type="text" id="botName" placeholder="مثال: my-awesome-bot" required>
+                </div>
+                <div class="form-group">
+                    <label>🔑 توكن البوت (من @BotFather)</label>
+                    <input type="text" id="botToken" placeholder="1234567890:ABCdefGHIjklMNOpqrsTUVwxyz" required>
+                </div>
+                <div class="form-group">
+                    <label>📝 كود البوت (Python)</label>
+                    <textarea id="botCode" placeholder='# مثال بوت بسيط
+from telegram import Update
+from telegram.ext import Application, CommandHandler, ContextTypes
+
+BOT_TOKEN = "ضع_التوكن_هنا"
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("مرحباً! ✅")
+
+def main():
+    app = Application.builder().token(BOT_TOKEN).build()
+    app.add_handler(CommandHandler("start", start))
+    app.run_polling()
+
+if __name__ == "__main__":
+    main()'></textarea>
+                </div>
+                <button type="submit">🚀 إنشاء وتشغيل البوت</button>
+            </form>
+        </div>
+        
+        <div class="card">
+            <h2>📋 البوتات الحالية</h2>
+            <div id="botsList" class="bots-grid">
+                <div class="empty-state">✨ لا توجد بوتات بعد. أنشئ أول بوت لك!</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast"></div>
+    
+    <script>
+        let logsIntervals = {};
+        
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.background = isError ? '#ff4444' : '#00ff88';
+            toast.style.color = isError ? '#fff' : '#1a1a2e';
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+        
+        async function loadBots() {
+            try {
+                const response = await fetch('/api/bots');
+                if (!response.ok) throw new Error('فشل الاتصال');
+                const bots = await response.json();
+                
+                if (bots.length === 0) {
+                    document.getElementById('botsList').innerHTML = '<div class="empty-state">✨ لا توجد بوتات بعد. أنشئ أول بوت لك!</div>';
+                    return;
+                }
+                
+                let html = '';
+                for (const bot of bots) {
+                    const statusClass = bot.status === 'running' ? 'status-running' : 'status-stopped';
+                    const statusText = bot.status === 'running' ? '🟢 يعمل' : '🔴 متوقف';
+                    
+                    html += `
+                        <div class="bot-card">
+                            <h3>🤖 ${bot.name}</h3>
+                            <div class="bot-token">🔑 ${bot.token.substring(0, 30)}...</div>
+                            <div class="status ${statusClass}">${statusText}</div>
+                            <div class="bot-actions">
+                                <button class="btn-start" onclick="controlBot('${bot.name}', 'start')">▶️ تشغيل</button>
+                                <button class="btn-stop" onclick="controlBot('${bot.name}', 'stop')">⏹️ إيقاف</button>
+                                <button class="btn-restart" onclick="controlBot('${bot.name}', 'restart')">🔄 إعادة تشغيل</button>
+                                <button class="btn-delete" onclick="deleteBot('${bot.name}')">🗑️ حذف</button>
+                            </div>
+                            <div class="logs" id="logs-${bot.name}">
+                                <p>⏳ جاري تحميل السجلات...</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('botsList').innerHTML = html;
+                
+                for (const bot of bots) {
+                    if (!logsIntervals[bot.name]) {
+                        startLogsPolling(bot.name);
+                    }
+                }
+                
+            } catch (e) {
+                document.getElementById('botsList').innerHTML = '<div class="empty-state">⚠️ خطأ في الاتصال بالخادم</div>';
+            }
+        }
+        
+        async function controlBot(botName, action) {
+            try {
+                const response = await fetch(`/api/bots/${botName}/${action}`, { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    showToast(`✅ تم ${action === 'start' ? 'تشغيل' : action === 'stop' ? 'إيقاف' : 'إعادة تشغيل'} البوت`);
+                    loadBots();
+                } else {
+                    showToast(`❌ فشل الإجراء`, true);
+                }
+            } catch (e) {
+                showToast('❌ حدث خطأ', true);
+            }
+        }
+        
+        async function deleteBot(botName) {
+            if (!confirm(`⚠️ هل أنت متأكد من حذف البوت "${botName}" نهائياً؟`)) return;
+            
+            try {
+                const response = await fetch(`/api/bots/${botName}`, { method: 'DELETE' });
+                const data = await response.json();
+                if (data.success) {
+                    showToast(`✅ تم حذف البوت ${botName}`);
+                    if (logsIntervals[botName]) {
+                        clearInterval(logsIntervals[botName]);
+                        delete logsIntervals[botName];
+                    }
+                    loadBots();
+                } else {
+                    showToast(`❌ فشل الحذف`, true);
+                }
+            } catch (e) {
+                showToast('❌ حدث خطأ', true);
+            }
+        }
+        
+        async function startLogsPolling(botName) {
+            const fetchLogs = async () => {
+                try {
+                    const response = await fetch(`/api/bots/${botName}/logs?limit=50`);
+                    const data = await response.json();
+                    const logsContainer = document.getElementById(`logs-${botName}`);
+                    if (logsContainer && data.logs) {
+                        if (data.logs.length === 0) {
+                            logsContainer.innerHTML = '<p>📭 لا توجد سجلات بعد</p>';
+                        } else {
+                            logsContainer.innerHTML = data.logs.map(log => `<p>📝 ${escapeHtml(log)}</p>`).join('');
+                            logsContainer.scrollTop = logsContainer.scrollHeight;
+                        }
+                    }
+                } catch (e) {
+                    console.error('Failed to fetch logs:', e);
+                }
+            };
+            
+            await fetchLogs();
+            logsIntervals[botName] = setInterval(fetchLogs, 3000);
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        document.getElementById('createBotForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('botName').value.trim();
+            const token = document.getElementById('botToken').value.trim();
+            const code = document.getElementById('botCode').value;
+            
+            if (!name || !token || !code) {
+                showToast('⚠️ يرجى ملء جميع الحقول', true);
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/bots', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, token, code })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showToast('✅ تم إنشاء وتشغيل البوت بنجاح');
+                    document.getElementById('botName').value = '';
+                    document.getElementById('botToken').value = '';
+                    document.getElementById('botCode').value = '';
+                    loadBots();
+                } else {
+                    showToast(`❌ ${data.error || 'فشل إنشاء البوت'}`, true);
+                }
+            } catch (e) {
+                showToast('❌ حدث خطأ في الاتصال', true);
+            }
+        };
+        
+        loadBots();
+        setInterval(loadBots, 5000);
+    </script>
+</body>
+</html>
